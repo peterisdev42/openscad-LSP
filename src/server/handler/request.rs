@@ -8,9 +8,9 @@ use lsp_server::{ErrorCode, RequestId, Response, ResponseError};
 use lsp_types::{
     BaseSymbolInformation, CompletionItem, CompletionItemKind, CompletionList, CompletionParams,
     CompletionResponse, Contents, DefinitionParams, DefinitionResponse, DocumentFormattingParams,
-    DocumentSymbolParams, DocumentSymbolResponse, Documentation, Hover, HoverParams,
-    InsertTextFormat, InsertTextMode, Location, MarkupContent, PrepareRenameParams, Range,
-    RenameParams, SymbolInformation, TextEdit, WorkspaceEdit,
+    DocumentSymbolParams, DocumentSymbolResponse, Documentation, FoldingRangeParams, Hover,
+    HoverParams, InsertTextFormat, InsertTextMode, Location, MarkupContent, PrepareRenameParams,
+    Range, RenameParams, SymbolInformation, TextEdit, WorkspaceEdit,
 };
 
 use crate::tree_sitter_traversal::{Order, traverse};
@@ -31,6 +31,20 @@ fn get_node_at_point<'a>(parsed_code: &'a Ref<'_, ParsedCode>, point: Point) -> 
 
 // Request handlers.
 impl Server {
+    pub(crate) fn handle_folding_ranges(&mut self, id: RequestId, params: FoldingRangeParams) {
+        let ranges = self
+            .get_code(&params.text_document.uri)
+            .map(|file| {
+                let file = file.borrow();
+                super::super::folding::folding_ranges(&file.tree, &file.code)
+            })
+            .unwrap_or_default();
+        self.respond(Response {
+            id,
+            response_result: Ok(serde_json::to_value(ranges).unwrap()),
+        });
+    }
+
     pub(crate) fn handle_prepare_rename(&mut self, id: RequestId, params: PrepareRenameParams) {
         let uri = params.text_document_position_params.text_document.uri;
 

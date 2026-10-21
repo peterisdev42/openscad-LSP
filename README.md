@@ -21,6 +21,9 @@ Features
 -   code snippets
 -   function/module signatures on hover
 -   document symbols
+-   syntax-tree folding for modules, functions, geometry/control blocks, calls,
+    vectors and block comments; nested `// #region` / `// #endregion` markers
+    (also accepted without `#`) are included when server folding is active
 -   formatter, utilizing topiary.
 -   variable / module renaming
 -   hover and suggestion documentation, read from comments before the function/module.</br>

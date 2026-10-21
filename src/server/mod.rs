@@ -1,6 +1,7 @@
 #[macro_use]
 pub(crate) mod utils;
 pub(crate) mod code_helper;
+pub(crate) mod folding;
 pub(crate) mod handler;
 pub(crate) mod parse_code;
 pub(crate) mod response_item;
@@ -198,6 +199,7 @@ impl Server {
         let caps = serde_json::to_value(ServerCapabilities {
             text_document_sync: Some(TextDocumentSyncKind::Incremental.into()),
             completion_provider: Some(CompletionOptions::default()),
+            folding_range_provider: Some(true.into()),
             definition_provider: Some(true.into()),
             hover_provider: Some(true.into()),
             document_symbol_provider: Some(true.into()),

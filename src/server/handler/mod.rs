@@ -6,7 +6,7 @@ use lsp_types::{
     CompletionRequest, DefinitionRequest, DidChangeConfigurationNotification,
     DidChangeTextDocumentNotification, DidCloseTextDocumentNotification,
     DidOpenTextDocumentNotification, DidSaveTextDocumentNotification, DocumentFormattingRequest,
-    DocumentSymbolRequest, HoverRequest, PrepareRenameRequest, RenameRequest,
+    DocumentSymbolRequest, FoldingRangeRequest, HoverRequest, PrepareRenameRequest, RenameRequest,
 };
 
 use super::LoopAction;
@@ -62,6 +62,7 @@ impl Server {
                 let req = proc_req!(req, CompletionRequest, handle_completion);
                 let req = proc_req!(req, DefinitionRequest, handle_definition);
                 let req = proc_req!(req, DocumentSymbolRequest, handle_document_symbols);
+                let req = proc_req!(req, FoldingRangeRequest, handle_folding_ranges);
                 let req = proc_req!(req, DocumentFormattingRequest, handle_formatting);
                 let req = proc_req!(req, PrepareRenameRequest, handle_prepare_rename);
                 let req = proc_req!(req, RenameRequest, handle_rename);
